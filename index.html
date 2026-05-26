@@ -191,6 +191,14 @@
       text-shadow: 2px 3px 14px rgba(139,26,74,.17);
     }
 
+    .s2-name {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      color: #c0392b; text-align: center;
+      text-shadow: 2px 3px 18px rgba(192,57,43,.22);
+      line-height: 1;
+    }
+
     .s2-sub {
       font-family: 'Sacramento', cursive;
       font-size: clamp(1.15rem, 3vw, 1.65rem);
@@ -364,7 +372,8 @@
        style="width:160px;height:160px;border-radius:50%;object-fit:cover;box-shadow:0 8px 28px rgba(230,80,140,.25);pointer-events:none;"/>
 
   <h2 class="s2-question">Will you be mine forever? 🌹</h2>
-  <p class="s2-sub">I've been waiting to ask you this…</p>
+  <p class="s2-name">Priyanshu</p>
+  <p class="s2-sub">I've been waiting for you…</p>
 
   <!-- Buttons positioned by JS -->
   <button id="s2-yes" class="s2-btn" style="display:none">Yes, always 💕</button>
@@ -579,7 +588,8 @@ function showStage(nextId, callback) {
 
   /* entrance animations */
   gsap.fromTo('.s2-question', { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .85, ease: 'power3.out' });
-  gsap.fromTo('.s2-sub',      { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: .8, delay: .2, ease: 'power3.out' });
+  gsap.fromTo('.s2-name',     { scale: .6, opacity: 0 }, { scale: 1, opacity: 1, duration: .9, delay: .18, ease: 'back.out(2)' });
+  gsap.fromTo('.s2-sub',      { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: .8, delay: .35, ease: 'power3.out' });
   setTimeout(() => {
     gsap.fromTo(yesBtn, { scale: .7, opacity: 0 }, { scale: 1, opacity: 1, duration: .6, delay: .0, ease: 'back.out(2)' });
     gsap.fromTo(noBtn,  { scale: .7, opacity: 0 }, { scale: 1, opacity: 1, duration: .6, delay: .12, ease: 'back.out(2)' });
@@ -725,14 +735,22 @@ function initStage4() {
   gsap.to('#s4-knew-it', { opacity: 1, duration: 1.5, ease: 'power3.out', delay: .6 });
   gsap.to('#s4-names',   { opacity: 1, duration: 1.3, ease: 'power3.out', delay: 1.1 });
 
-  /* music button — plain HTML5 audio, no CORS issues */
-  const s4Audio = document.getElementById('s4-audio');
-  const s4Btn   = document.getElementById('s4-music-btn');
-  s4Btn.addEventListener('click', () => {
+  /* music: play on first tap/click anywhere in stage 4 */
+  const s4Audio   = document.getElementById('s4-audio');
+  const s4Btn     = document.getElementById('s4-music-btn');
+  const s4Stage   = document.getElementById('stage-4');
+  let   s4Playing = false;
+
+  function startMusic() {
+    if (s4Playing) return;
+    s4Playing = true;
     s4Audio.volume = 0.6;
     s4Audio.play().catch(() => {});
     gsap.to(s4Btn, { opacity: 0, duration: 1, pointerEvents: 'none' });
-  });
+  }
+
+  s4Stage.addEventListener('click',      startMusic);
+  s4Stage.addEventListener('touchstart', startMusic, { passive: true });
 
   /* inject Three.js ES module — uses global gsap already loaded */
   const s = document.createElement('script');
