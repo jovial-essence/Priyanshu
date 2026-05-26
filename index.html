@@ -284,6 +284,72 @@
       border: 6px solid rgba(255,218,218,.32);
       inset: 1rem; z-index: 20; pointer-events: none;
     }
+
+    /* ══════════════════════════════════════════
+       STAGE-2 SCATTER PHOTO SIZE
+       (no #stage-2 scoped rule existed)
+    ══════════════════════════════════════════ */
+    #stage-2 .scatter-photo {
+      width: 90px;
+      border: 4px solid #fff;
+      box-shadow: 0 6px 22px rgba(140,40,80,0.18);
+    }
+
+    /* ══════════════════════════════════════════
+       MOBILE  ≤ 540 px
+    ══════════════════════════════════════════ */
+    @media (max-width: 540px) {
+      /* Hide decorative scatter photos to free up space */
+      .scatter-photo { display: none !important; }
+
+      /* ── Stage 1 — question ── */
+      #stage-1 { gap: 10px; padding: 0 18px; }
+      #stage-1 img { width: 120px !important; height: 120px !important; }
+      .s2-question { font-size: clamp(1.85rem, 7.5vw, 2.6rem); }
+      .s2-sub      { font-size: clamp(0.9rem, 3.5vw, 1.15rem); }
+      #s2-yes, #s2-no { font-size: 0.88rem; padding: 10px 22px; }
+
+      /* ── Stage 2 — envelope shrinks via scale so triangles stay correct ── */
+      #s1-envelope { transform: scale(0.84); transform-origin: center; margin: -16px 0; }
+
+      /* ── Letter card: fluid width + scrollable ── */
+      #s1-card {
+        width: min(92vw, 300px);
+        padding: 16px 14px 14px;
+        max-height: 68vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
+      }
+      #s1-card .card-line.body { font-size: 1rem; line-height: 1.6; }
+      #s1-card .card-line.sign { font-size: 1.15rem; }
+
+      /* ── Pin Open/Next buttons to bottom so card never covers them ── */
+      .s1-controls {
+        position: fixed;
+        bottom: 4vh;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 25;
+      }
+
+      /* ── Stage 4 ── */
+      .s4-knew-it { font-size: clamp(2rem, 8vw, 3rem) !important; }
+      #s4-music-btn { bottom: 3vh; }
+      #s4-music-btn svg { width: 2.2rem; }
+    }
+
+    /* ══════════════════════════════════════════
+       LANDSCAPE MOBILE  (short screen)
+    ══════════════════════════════════════════ */
+    @media (max-height: 500px) and (orientation: landscape) {
+      #stage-1 { gap: 6px; }
+      #stage-1 img { width: 80px !important; height: 80px !important; }
+      .s2-question { font-size: clamp(1.4rem, 5vw, 2rem); }
+      .s2-sub { display: none; }
+      #s1-card { max-height: 80vh; }
+      #s1-envelope { transform: scale(0.7); margin: -30px 0; }
+    }
   </style>
 </head>
 <body>
@@ -495,16 +561,18 @@ function showStage(nextId, callback) {
   const yesBtn = document.getElementById('s2-yes');
   const noBtn  = document.getElementById('s2-no');
 
-  /* position buttons center-screen via fixed coords */
+  /* position buttons — below content on mobile, centered on desktop */
   function placeButtons() {
-    const cx = window.innerWidth  / 2;
-    const cy = window.innerHeight / 2;
+    const cx       = window.innerWidth  / 2;
+    const mobile   = window.innerWidth <= 540;
+    const cy       = mobile ? window.innerHeight * 0.76 : window.innerHeight / 2;
+    const gap      = mobile ? 12 : 24;
     yesBtn.style.display = 'block';
     noBtn.style.display  = 'block';
-    yesBtn.style.left = (cx - yesBtn.offsetWidth  - 24) + 'px';
-    yesBtn.style.top  = (cy - yesBtn.offsetHeight / 2)  + 'px';
-    noBtn.style.left  = (cx + 24)                        + 'px';
-    noBtn.style.top   = (cy - noBtn.offsetHeight  / 2)  + 'px';
+    yesBtn.style.left = (cx - yesBtn.offsetWidth  - gap) + 'px';
+    yesBtn.style.top  = (cy - yesBtn.offsetHeight / 2)   + 'px';
+    noBtn.style.left  = (cx + gap)                        + 'px';
+    noBtn.style.top   = (cy - noBtn.offsetHeight  / 2)   + 'px';
   }
   /* small delay so layout is painted */
   setTimeout(placeButtons, 80);
@@ -602,7 +670,8 @@ function initStage2() {
     env.classList.add('open');
 
     /* card flies up as a full readable sheet */
-    gsap.to(card, { opacity: 1, scale: 1, top: '14%', yPercent: 0,
+    const cardTop = window.innerWidth <= 540 ? '3%' : '14%';
+    gsap.to(card, { opacity: 1, scale: 1, top: cardTop, yPercent: 0,
                     duration: 0.95, delay: 0.5, ease: 'power3.out' });
     /* stagger each line in */
     gsap.to('#s1-card .card-line',
