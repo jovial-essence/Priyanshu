@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>For Priyanshu 💕</title>
+
+  <!-- Romantic script font stack -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Great+Vibes&family=Alex+Brush&family=Pacifico&family=Sacramento&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* ──────────────────────────────────────────
+       RESET & BASE
+    ────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; overflow: hidden; }
+
+    /* ──────────────────────────────────────────
+       STAGE SYSTEM
+    ────────────────────────────────────────── */
+    .stage {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ──────────────────────────────────────────
+       POLAROID PHOTO UTILITY
+    ────────────────────────────────────────── */
+    .scatter-photo {
+      position: absolute;
+      object-fit: cover;
+      border-radius: 4px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+      pointer-events: none;
+    }
+
+    /* ══════════════════════════════════════════
+       STAGE 1 — LOVE LETTER
+    ══════════════════════════════════════════ */
+    #stage-1 {
+      background: linear-gradient(140deg, #fce4ec 0%, #f8bbd0 45%, #ede7f6 100%);
+      gap: 22px;
+    }
+
+    #stage-1 .scatter-photo {
+      width: 118px;
+      border: 5px solid #fff;
+      box-shadow: 0 6px 22px rgba(140,40,80,0.18);
+    }
+
+    /* Envelope */
+    #s1-envelope {
+      position: relative;
+      width: 320px;
+      height: 200px;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+      background-color: #c0392b;
+      box-shadow: 0 14px 48px rgba(192,57,43,0.32);
+      cursor: pointer;
+      z-index: 5;
+    }
+
+    .s1-flap {
+      position: absolute;
+      width: 0; height: 0;
+      z-index: 5;
+      border-left:  160px solid transparent;
+      border-right: 160px solid transparent;
+      border-top:   112px solid #c0392b;
+      border-bottom: 88px solid transparent;
+      transform-origin: top;
+      pointer-events: none;
+      transition: transform .45s ease, z-index .65s;
+    }
+
+    .s1-pocket {
+      position: absolute;
+      width: 0; height: 0;
+      z-index: 3;
+      border-left:   160px solid #e67c6b;
+      border-right:  160px solid #e67c6b;
+      border-bottom: 100px solid #d94f4a;
+      border-top:    100px solid transparent;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+
+    /* white stub visible inside envelope before it opens */
+    .s1-letter-stub {
+      position: relative;
+      background: #fff;
+      width: 86%; margin: 0 auto;
+      height: 88%; top: 6%;
+      border-radius: 4px;
+      z-index: 2;
+    }
+
+    /* Open state — flap folds back, stub stays (card animates separately) */
+    #s1-envelope.open .s1-flap { transform: rotateX(180deg); z-index: 1; }
+
+    /* ── Floating letter card ── */
+    #s1-card {
+      position: absolute;
+      width: 310px;
+      background: linear-gradient(160deg, #fffafa 0%, #fff8fb 100%);
+      border-radius: 14px;
+      padding: 30px 28px 26px;
+      box-shadow: 0 20px 70px rgba(139,26,74,0.22), 0 4px 18px rgba(0,0,0,0.07);
+      font-family: 'Dancing Script', cursive;
+      z-index: 20;
+      pointer-events: none;
+      border-top: 3px solid rgba(192,57,43,0.18);
+    }
+
+    #s1-card .card-icon  { text-align: center; font-size: 1.5rem; margin-bottom: 14px; }
+
+    #s1-card .card-line  {
+      display: block; color: #7b2d48;
+      line-height: 1.8; opacity: 0;
+    }
+    #s1-card .card-line.to   { font-size: .88rem; color: #a0415c; margin-bottom: 6px; }
+    #s1-card .card-line.body { font-size: 1.18rem; }
+    #s1-card .card-line.sign { font-size: 1.45rem; font-weight: 700; margin-top: 10px; }
+
+    /* Floating hearts */
+    .s1-hearts { position: absolute; top: 78px; left: 0; right: 0; z-index: 2; pointer-events: none; }
+
+    .s1-heart {
+      position: absolute; bottom: 0; opacity: 0;
+    }
+    .s1-heart::before, .s1-heart::after {
+      position: absolute; content: '';
+      left: 50px; top: 0; width: 50px; height: 80px;
+      background: #e60073; border-radius: 50px 50px 0 0;
+      transform: rotate(-45deg); transform-origin: 0 100%;
+    }
+    .s1-heart::after { left: 0; transform: rotate(45deg); transform-origin: 100% 100%; }
+
+    #s1-envelope.open .s1-heart {
+      opacity: 1;
+      animation: s1Up 5.5s linear forwards, s1Sway 2.2s ease-in-out infinite alternate;
+    }
+    .s1-ha1 { left: 18%; transform: scale(.55); animation-delay: .7s !important; }
+    .s1-ha2 { left: 54%; transform: scale(.9);  animation-delay: 1.1s !important; }
+    .s1-ha3 { left: 8%;  transform: scale(.7);  animation-delay: .4s !important; }
+
+    @keyframes s1Up   { 0%{top:0;opacity:1}  100%{top:-520px;opacity:0} }
+    @keyframes s1Sway { 0%{margin-left:0}    100%{margin-left:44px} }
+
+    /* Stage 1 buttons */
+    .s1-controls { display: flex; gap: 14px; }
+
+    .s1-btn {
+      font-family: 'Quicksand', sans-serif; font-weight: 700;
+      font-size: .83rem; text-transform: uppercase; letter-spacing: .12em;
+      padding: 10px 30px; border: 2px solid rgba(192,57,43,.65);
+      border-radius: 50px; background: rgba(255,255,255,.38);
+      color: #c0392b; cursor: pointer; backdrop-filter: blur(6px);
+      transition: background .2s, color .2s, border-color .2s;
+    }
+    .s1-btn:hover { background: #c0392b; color: #fff; border-color: #c0392b; }
+
+    /* ══════════════════════════════════════════
+       STAGE 2 — WILL YOU BE MINE
+    ══════════════════════════════════════════ */
+    #stage-2 {
+      background: radial-gradient(ellipse at 50% 55%, #fff5f8 0%, #ffdaec 50%, #ffaacb 100%);
+      gap: 1.6rem;
+    }
+
+    #stage-2 .tenor-gif-embed {
+      pointer-events: none; border-radius: 50%; overflow: hidden;
+      width: 160px !important; height: 160px !important;
+      box-shadow: 0 8px 28px rgba(230,80,140,.25);
+    }
+
+    .s2-question {
+      font-family: 'Alex Brush', cursive;
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      color: #8b1a4a; text-align: center;
+      line-height: 1.15;
+      text-shadow: 2px 3px 14px rgba(139,26,74,.17);
+    }
+
+    .s2-sub {
+      font-family: 'Sacramento', cursive;
+      font-size: clamp(1.15rem, 3vw, 1.65rem);
+      color: #bf4d73; text-align: center;
+    }
+
+    /* Yes stays; No runs */
+    #s2-yes, #s2-no {
+      font-family: 'Quicksand', sans-serif; font-weight: 700;
+      font-size: 1rem; padding: 13px 40px;
+      border: none; border-radius: 50px; cursor: pointer;
+      position: fixed; z-index: 50;
+      transition: box-shadow .15s, transform .15s;
+    }
+
+    #s2-yes {
+      background: linear-gradient(135deg, #ff6b81, #e8438e);
+      color: #fff; box-shadow: 0 6px 26px rgba(232,67,142,.45);
+    }
+    #s2-yes:hover { transform: scale(1.07); box-shadow: 0 8px 34px rgba(232,67,142,.6); }
+
+    #s2-no {
+      background: linear-gradient(135deg, #ccc, #aaa);
+      color: #fff; box-shadow: 0 4px 14px rgba(0,0,0,.15);
+    }
+
+    /* No video overlay */
+    #no-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #000; display: none;
+      align-items: center; justify-content: center;
+    }
+    #no-video { width: 100%; height: 100%; object-fit: cover; }
+    .no-caption {
+      position: absolute; bottom: 12%; width: 100%; text-align: center;
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      color: #fff; text-shadow: 0 2px 18px rgba(0,0,0,.9);
+    }
+
+    /* ══════════════════════════════════════════
+       STAGE 3 — HEART DRAWING
+    ══════════════════════════════════════════ */
+    #stage-3 {
+      background: radial-gradient(ellipse at center, #12000a 0%, #080004 100%);
+      gap: 0; overflow: hidden;
+    }
+
+    /* heart-of-love block animation */
+    #s3-love {
+      width: 520px; height: 440px;
+      position: relative; top: 0;
+    }
+    @media (max-width: 560px) {
+      #s3-love { transform: scale(.58); transform-origin: center center; }
+    }
+
+    #s3-love .block         { position: absolute; visibility: hidden; }
+    #s3-love .block div     {
+      width: 40px; height: 40px; position: absolute;
+      background: url('heart_of_love_tcw/images/heart.png') no-repeat center/contain;
+      box-sizing: border-box;
+    }
+
+    #s3-names {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(1.55rem, 4vw, 2.6rem);
+      color: #ff89ac; text-align: center;
+      text-shadow: 0 0 32px rgba(255,137,172,.75);
+      margin-top: 14px; opacity: 0;
+    }
+
+    #s3-knew-it {
+      font-family: 'Alex Brush', cursive;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      color: #ffb3cc; text-align: center; white-space: nowrap;
+      opacity: 0;
+      position: absolute; bottom: 9%;
+      left: 50%; transform: translateX(-50%);
+      z-index: 6;
+      text-shadow: 0 0 44px rgba(255,179,204,.9);
+    }
+
+    #stage-3 .scatter-photo {
+      width: 86px; border: 3px solid rgba(255,255,255,.15); z-index: 2;
+    }
+
+    /* ══════════════════════════════════════════
+       STAGE 4 — CRYSTAL HEART FINALE
+    ══════════════════════════════════════════ */
+    #stage-4 { background: #16000a; }
+
+    #s4-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; z-index: 1;
+    }
+
+    .s4-overlay {
+      position: absolute; inset: 0; z-index: 10;
+      pointer-events: none;
+      display: flex; flex-direction: column;
+      align-items: center; padding-top: 8vh; gap: 10px;
+    }
+
+    .s4-knew-it {
+      font-family: 'Alex Brush', cursive;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      color: #ffdada; text-align: center;
+      text-shadow: 0 0 55px rgba(255,137,172,.9), 0 0 110px rgba(255,77,109,.5);
+      opacity: 0;
+    }
+
+    .s4-names {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(1.2rem, 3.5vw, 2.2rem);
+      color: #ff89ac; text-align: center;
+      text-shadow: 0 0 28px rgba(255,137,172,.6);
+      opacity: 0;
+    }
+
+    #s4-music-btn {
+      position: absolute; bottom: 8vh;
+      left: 50%; transform: translateX(-50%);
+      background: transparent; border: none;
+      color: #ffdada; cursor: pointer;
+      z-index: 20; opacity: .75;
+      transition: opacity .3s;
+      pointer-events: all;
+    }
+    #s4-music-btn:hover { opacity: 1; }
+    #s4-music-btn svg   { width: 2.8rem; }
+
+    #stage-4 .scatter-photo { width: 72px; border: 3px solid rgba(255,255,255,.1); z-index: 8; }
+
+    /* frame border */
+    #stage-4::after {
+      content: ''; position: absolute;
+      border: 6px solid rgba(255,218,218,.32);
+      inset: 1rem; z-index: 20; pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════
+     STAGE 1 — WILL YOU BE MINE
+════════════════════════════════════════════════ -->
+<section id="stage-1" class="stage">
+
+  <img src="heart_of_love_tcw/images/biubiubiu.gif"
+       alt="biubiubiu"
+       style="width:160px;height:160px;border-radius:50%;object-fit:cover;box-shadow:0 8px 28px rgba(230,80,140,.25);pointer-events:none;"/>
+
+  <h2 class="s2-question">Will you be mine forever? 🌹</h2>
+  <p class="s2-sub">I've been waiting to ask you this…</p>
+
+  <!-- Buttons positioned by JS -->
+  <button id="s2-yes" class="s2-btn" style="display:none">Yes, always 💕</button>
+  <button id="s2-no"  class="s2-btn" style="display:none">No…</button>
+
+</section>
+
+
+<!-- ════════════════════════════════════════════════
+     STAGE 2 — LOVE LETTER
+════════════════════════════════════════════════ -->
+<section id="stage-2" class="stage">
+
+  <img src="1.png" class="scatter-photo s1-p1" alt=""/>
+  <img src="2.png" class="scatter-photo s1-p2" alt=""/>
+  <img src="3.png" class="scatter-photo s1-p3" alt=""/>
+  <img src="4.png" class="scatter-photo s1-p4" alt=""/>
+  <img src="5.png" class="scatter-photo s1-p5" alt=""/>
+  <img src="6.png" class="scatter-photo s1-p6" alt=""/>
+
+  <div id="s1-envelope" class="close">
+    <div class="s1-flap"></div>
+    <div class="s1-pocket"></div>
+    <div class="s1-letter-stub"></div>
+    <div class="s1-hearts">
+      <div class="s1-heart s1-ha1"></div>
+      <div class="s1-heart s1-ha2"></div>
+      <div class="s1-heart s1-ha3"></div>
+    </div>
+  </div>
+
+  <!-- Full letter card — flies out on open -->
+  <div id="s1-card">
+    <div class="card-icon">💌</div>
+    <span class="card-line to">To: Priyanshu</span>
+    <span class="card-line body">Dear Priyanshu,</span>
+    <span class="card-line body">Every moment with you feels like</span>
+    <span class="card-line body">the universe finally made sense.</span>
+    <span class="card-line body">Your smile is my sunrise &amp;</span>
+    <span class="card-line body">your laughter — my favourite song.</span>
+    <span class="card-line body">I have loved you quietly, deeply,</span>
+    <span class="card-line body">and completely — forever.</span>
+    <span class="card-line sign">— Jonty 💕</span>
+  </div>
+
+  <div class="s1-controls">
+    <button id="s1-open" class="s1-btn">Open ✉</button>
+    <button id="s1-close" class="s1-btn">Next →</button>
+  </div>
+
+</section>
+
+
+<!-- ════════════════════════════════════════════════
+     NO VIDEO OVERLAY
+════════════════════════════════════════════════ -->
+<div id="no-overlay">
+  <video id="no-video" src="no.mp4" loop playsinline></video>
+  <p class="no-caption">Are you sure about that? 🥺</p>
+</div>
+
+
+<!-- ════════════════════════════════════════════════
+     STAGE 3 — HEART DRAWING
+════════════════════════════════════════════════ -->
+<section id="stage-3" class="stage">
+
+  <img src="1.png" class="scatter-photo s3-p1" alt=""/>
+  <img src="2.png" class="scatter-photo s3-p2" alt=""/>
+  <img src="3.png" class="scatter-photo s3-p3" alt=""/>
+  <img src="4.png" class="scatter-photo s3-p4" alt=""/>
+  <img src="5.png" class="scatter-photo s3-p5" alt=""/>
+  <img src="6.png" class="scatter-photo s3-p6" alt=""/>
+
+  <div id="s3-love">
+    <div class="block">
+      <div></div><div></div><div></div><div></div>
+    </div>
+  </div>
+
+  <p id="s3-names">Jonty ♥ Priyanshu</p>
+  <p id="s3-knew-it">I knew it 😍</p>
+
+  <audio id="s3-audio" loop>
+    <source src="heart_of_love_tcw/MP3/1.mp3" type="audio/mpeg"/>
+  </audio>
+
+</section>
+
+
+<!-- ════════════════════════════════════════════════
+     STAGE 4 — CRYSTAL HEART FINALE
+════════════════════════════════════════════════ -->
+<section id="stage-4" class="stage">
+
+  <img src="1.png" class="scatter-photo s4-p1" alt=""/>
+  <img src="2.png" class="scatter-photo s4-p2" alt=""/>
+  <img src="3.png" class="scatter-photo s4-p3" alt=""/>
+  <img src="4.png" class="scatter-photo s4-p4" alt=""/>
+  <img src="5.png" class="scatter-photo s4-p5" alt=""/>
+  <img src="6.png" class="scatter-photo s4-p6" alt=""/>
+
+  <canvas id="s4-canvas"></canvas>
+
+  <div class="s4-overlay">
+    <div class="s4-knew-it" id="s4-knew-it">I knew it 😍</div>
+    <div class="s4-names"   id="s4-names">Jonty ♥ Priyanshu</div>
+  </div>
+
+  <audio id="s4-audio" loop>
+    <source src="heart_of_love_tcw/MP3/1.mp3" type="audio/mpeg"/>
+  </audio>
+
+  <button id="s4-music-btn" aria-label="Play music">
+    <svg fill="currentColor" viewBox="0 0 512 512">
+      <path d="M470.38 1.51L150.41 96A32 32 0 0 0 128 126.51v261.41A139 139 0 0 0
+               96 384c-53 0-96 28.66-96 64s43 64 96 64 96-28.66 96-64V214.32l256-75
+               v184.61a138.4 138.4 0 0 0-32-3.93c-53 0-96 28.66-96 64s43 64 96 64
+               96-28.65 96-64V32a32 32 0 0 0-41.62-30.49z"/>
+    </svg>
+  </button>
+
+</section>
+
+
+<!-- Three.js shaders for Stage 4 -->
+<script type="x-shader/x-vertex" id="vertexShader">
+  #define M_PI 3.1415926535897932384626433832795
+  uniform float uTime; uniform float uSize;
+  attribute float aScale; attribute vec3 aColor;
+  attribute float random; attribute float random1; attribute float aSpeed;
+  varying vec3 vColor; varying vec2 vUv;
+  void main() {
+    float s = 2.0*(step(random,.5)-.5);
+    float t = s*mod(-uTime*aSpeed*.005+10.0*aSpeed*aSpeed, M_PI);
+    float a = pow(t,2.0)*pow((t-s*M_PI),2.0);
+    float r = .14;
+    vec3 off = vec3(
+      r*16.0*pow(sin(t),2.0)*sin(t),
+      r*(13.0*cos(t)-5.0*cos(2.0*t)-2.0*cos(3.0*t)-cos(4.0*t)),
+      .15*(a*(random1-.5))*sin(abs(10.0*(sin(.2*uTime+.2*random)))*t));
+    vec4 mp = modelMatrix*vec4(off,1.0);
+    vec4 vp = viewMatrix*mp;
+    vp.xyz += position*aScale*uSize*pow(a,.5)*.5;
+    gl_Position = projectionMatrix*vp;
+    vColor = aColor; vUv = uv;
+  }
+</script>
+<script type="x-shader/x-fragment" id="fragmentShader">
+  varying vec3 vColor; varying vec2 vUv;
+  void main() {
+    float s = 1.0 - distance(vUv,vec2(.5))*2.0;
+    gl_FragColor = vec4(s*vColor,1.0);
+  }
+</script>
+<script type="x-shader/x-vertex" id="vertexShader1">
+  #define M_PI 3.1415926535897932384626433832795
+  uniform float uTime; uniform float uSize;
+  attribute float aScale; attribute vec3 aColor;
+  attribute float phi; attribute float random; attribute float random1;
+  varying vec3 vColor; varying vec2 vUv;
+  void main() {
+    float t = mod((-uTime+100.0)*.06*random1+random*2.0*M_PI,2.0*M_PI);
+    vec3 off = vec3(5.85*cos(phi*t), 2.0*(t-M_PI), 3.0*sin(phi*t/t));
+    vec4 mp = modelMatrix*vec4(off,1.0);
+    vec4 vp = viewMatrix*mp;
+    vp.xyz += position*aScale*uSize;
+    gl_Position = projectionMatrix*vp;
+    vColor = aColor; vUv = uv;
+  }
+</script>
+<script type="x-shader/x-fragment" id="fragmentShader1">
+  uniform sampler2D uTex; varying vec3 vColor; varying vec2 vUv;
+  void main() {
+    float s = 1.0 - distance(vUv,vec2(.5,.65))*2.0;
+    vec3 tex = texture2D(uTex,vUv).rgb;
+    gl_FragColor = vec4(tex*vColor*(s+.3),1.0);
+  }
+</script>
+
+
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<script>
+/* ═══════════════════════════════════════════
+   STAGE MANAGER
+═══════════════════════════════════════════ */
+let activeId = 'stage-1';
+
+function showStage(nextId, callback) {
+  const cur  = document.getElementById(activeId);
+  const next = document.getElementById(nextId);
+  gsap.to(cur, {
+    opacity: 0, duration: .85, ease: 'power2.inOut',
+    onComplete() {
+      cur.style.display = 'none';
+      activeId = nextId;
+      next.style.display = 'flex';
+      gsap.fromTo(next,
+        { opacity: 0 },
+        { opacity: 1, duration: 1, ease: 'power2.inOut', onComplete: callback }
+      );
+    }
+  });
+}
+
+
+/* ═══════════════════════════════════════════
+   STAGE 1 — WILL YOU BE MINE
+═══════════════════════════════════════════ */
+(function initStage1() {
+  const stage = document.getElementById('stage-1');
+  stage.style.display = 'flex';
+
+  const yesBtn = document.getElementById('s2-yes');
+  const noBtn  = document.getElementById('s2-no');
+
+  /* position buttons center-screen via fixed coords */
+  function placeButtons() {
+    const cx = window.innerWidth  / 2;
+    const cy = window.innerHeight / 2;
+    yesBtn.style.display = 'block';
+    noBtn.style.display  = 'block';
+    yesBtn.style.left = (cx - yesBtn.offsetWidth  - 24) + 'px';
+    yesBtn.style.top  = (cy - yesBtn.offsetHeight / 2)  + 'px';
+    noBtn.style.left  = (cx + 24)                        + 'px';
+    noBtn.style.top   = (cy - noBtn.offsetHeight  / 2)  + 'px';
+  }
+  /* small delay so layout is painted */
+  setTimeout(placeButtons, 80);
+
+  /* entrance animations */
+  gsap.fromTo('.s2-question', { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .85, ease: 'power3.out' });
+  gsap.fromTo('.s2-sub',      { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: .8, delay: .2, ease: 'power3.out' });
+  setTimeout(() => {
+    gsap.fromTo(yesBtn, { scale: .7, opacity: 0 }, { scale: 1, opacity: 1, duration: .6, delay: .0, ease: 'back.out(2)' });
+    gsap.fromTo(noBtn,  { scale: .7, opacity: 0 }, { scale: 1, opacity: 1, duration: .6, delay: .12, ease: 'back.out(2)' });
+  }, 120);
+
+  /* No runs away */
+  function runAway() {
+    const pad  = 80;
+    const maxX = window.innerWidth  - noBtn.offsetWidth  - pad;
+    const maxY = window.innerHeight - noBtn.offsetHeight - pad;
+    gsap.to(noBtn, {
+      left: pad + Math.random() * (maxX - pad),
+      top:  pad + Math.random() * (maxY - pad),
+      duration: .22, ease: 'power2.out'
+    });
+  }
+
+  noBtn.addEventListener('mouseover',  runAway);
+  noBtn.addEventListener('touchstart', runAway, { passive: true });
+
+  /* No click — show video 5 s */
+  noBtn.addEventListener('click', () => {
+    const overlay = document.getElementById('no-overlay');
+    const vid     = document.getElementById('no-video');
+    overlay.style.display = 'flex';
+    gsap.fromTo(overlay, { opacity: 0 }, { opacity: 1, duration: .5 });
+    vid.currentTime = 0;
+    vid.muted = false;
+    vid.play().catch(() => { vid.muted = true; vid.play(); });
+
+    setTimeout(() => {
+      gsap.to(overlay, { opacity: 0, duration: .5, onComplete() {
+        overlay.style.display = 'none';
+        vid.pause();
+        gsap.killTweensOf(noBtn);
+        runAway();
+      }});
+    }, 5000);
+  });
+
+  /* Yes click */
+  yesBtn.addEventListener('click', () => {
+    yesBtn.style.display = 'none';
+    noBtn.style.display  = 'none';
+    showStage('stage-2', initStage2);
+  });
+})();
+
+
+/* ═══════════════════════════════════════════
+   STAGE 2 — LOVE LETTER
+═══════════════════════════════════════════ */
+function initStage2() {
+  const stage = document.getElementById('stage-2');
+
+  /* scatter photos */
+  const pos1 = [
+    { top:'9%',    left:'2%',   rotate:-9  },
+    { top:'10%',   right:'2%',  rotate: 7  },
+    { bottom:'15%',left:'2%',   rotate: 6  },
+    { bottom:'12%',right:'2%',  rotate:-7  },
+    { top:'42%',   left:'1.5%', rotate: 11 },
+    { top:'39%',   right:'1.5%',rotate:-11 },
+  ];
+
+  for (let i = 1; i <= 6; i++) {
+    const el = stage.querySelector('.s1-p' + i);
+    const p  = pos1[i - 1];
+    Object.assign(el.style, p);
+    el.style.transform = 'rotate(' + p.rotate + 'deg)';
+    el.style.opacity   = '0';
+    gsap.to(el, { opacity: 1, duration: 1.3, delay: .18 * i, ease: 'power2.out' });
+    gsap.to(el, { y: -14, duration: 2.6 + i * .3, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: .4 * i });
+  }
+
+  /* envelope + card */
+  const env  = document.getElementById('s1-envelope');
+  const card = document.getElementById('s1-card');
+  let   opened = false;
+
+  /* park card centred over the envelope, hidden */
+  gsap.set(card, { xPercent: -50, yPercent: -50, left: '50%', top: '50%', opacity: 0, scale: 0.82 });
+
+  function openEnv() {
+    if (opened) return;
+    opened = true;
+    env.classList.remove('close');
+    env.classList.add('open');
+
+    /* card flies up as a full readable sheet */
+    gsap.to(card, { opacity: 1, scale: 1, top: '14%', yPercent: 0,
+                    duration: 0.95, delay: 0.5, ease: 'power3.out' });
+    /* stagger each line in */
+    gsap.to('#s1-card .card-line',
+      { opacity: 1, y: 0, duration: 0.45, stagger: 0.07, delay: 1.1, ease: 'power2.out',
+        from: { opacity: 0, y: 10 } });
+    /* envelope shrinks so card is dominant */
+    gsap.to(env, { scale: 0.7, opacity: 0.45, y: 55, duration: 0.7, delay: 0.6, ease: 'power2.out' });
+  }
+
+  document.getElementById('s1-open').addEventListener('click', openEnv);
+  env.addEventListener('click', openEnv);
+
+  document.getElementById('s1-close').addEventListener('click', () => {
+    showStage('stage-3', initStage3);
+  });
+
+  /* entrance */
+  gsap.fromTo(env, { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out', delay: .25 });
+  gsap.fromTo('.s1-controls', { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: .8, delay: .65 });
+}
+
+
+/* ═══════════════════════════════════════════
+   STAGE 3 — HEART DRAWING
+═══════════════════════════════════════════ */
+function initStage3() {
+  /* music */
+  const audio = document.getElementById('s3-audio');
+  audio.volume = .55;
+  audio.play().catch(() => {});
+
+  /* names fade in */
+  gsap.to('#s3-names', { opacity: 1, duration: 1.6, delay: .5, ease: 'power2.out' });
+
+  /* scatter photos */
+  const pos3 = [
+    { top:'6%',    left:'3%',   rotate:-13 },
+    { top:'8%',    right:'3%',  rotate: 9  },
+    { bottom:'8%', left:'3%',   rotate: 8  },
+    { bottom:'6%', right:'3%',  rotate:-10 },
+    { top:'42%',   left:'2%',   rotate: 12 },
+    { top:'38%',   right:'2%',  rotate:-14 },
+  ];
+
+  for (let i = 1; i <= 6; i++) {
+    const el = document.querySelector('#stage-3 .s3-p' + i);
+    const p  = pos3[i - 1];
+    el.style.position = 'absolute';
+    Object.assign(el.style, p);
+    el.style.transform = 'rotate(' + p.rotate + 'deg)';
+    el.style.opacity   = '0';
+    gsap.to(el, { opacity: .62, duration: 1.8, delay: .25 * i, ease: 'power2.out' });
+    gsap.to(el, { y: -10, duration: 3.5 + i * .4, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: .5 * i });
+  }
+
+  /* heart drawing */
+  startHeartDrawing(function onComplete() {
+    gsap.fromTo('#s3-knew-it',
+      { y: 14, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1.3, ease: 'power3.out', delay: .2 }
+    );
+    setTimeout(() => showStage('stage-4', initStage4), 2800);
+  });
+}
+
+/* heart-of-love block animation (adapted from heart_of_love_tcw/js/love.js) */
+function startHeartDrawing(onComplete) {
+  const blkPitn = {
+    block1: [[0,1],[0,0],[-1,0],[-1,-1]],  block2: [[0,1],[0,0],[-1,0],[0,-1]],
+    block3: [[-1,1],[0,0],[-1,0],[-1,-1]], block4: [[0,1],[0,0],[-1,0],[-1,-1]],
+    block5: [[-1,1],[0,0],[-1,0],[0,-1]],  block6: [[0,-1],[0,0],[-1,0],[1,-1]],
+    block7: [[-1,-1],[0,0],[-1,0],[1,0]],  block8: [[-1,1],[0,0],[-1,0],[-1,-1]],
+    block9: [[0,-1],[0,0],[-1,0],[1,0]],   block10:[[-1,1],[0,0],[-1,0],[1,0]],
+    block11:[[2,0],[0,0],[-1,0],[1,0]],    block12:[[0,1],[0,0],[-1,0],[0,-1]],
+    block13:[[0,1],[0,0],[-1,0],[-1,-1]],  block14:[[1,1],[0,0],[-1,0],[1,0]],
+    block15:[[1,-1],[0,0],[-1,0],[1,0]],   block16:[[-1,-1],[0,0],[-1,0],[1,0]],
+    block17:[[0,1],[0,0],[-1,0],[0,-1]],   block18:[[0,1],[0,0],[-1,0],[-1,-1]],
+    block19:[[0,-1],[0,0],[-1,0],[1,0]],   block20:[[1,-1],[0,0],[-1,0],[1,0]],
+    block21:[[0,1],[0,0],[-1,0],[-1,-1]],  block22:[[1,1],[0,0],[-1,0],[1,0]],
+    block23:[[0,2],[0,0],[0,-1],[0,1]],
+  };
+  const offPitn = {
+    block1:[5,3],  block2:[5,1],   block3:[3,4],  block4:[3,2],   block5:[3,-1],
+    block6:[2,5],  block7:[2,1],   block8:[1,-1], block9:[1,-3],  block10:[1,2],
+    block11:[0,3], block12:[0,0],  block13:[-1,-4],block14:[0,-2],block15:[-2,4],
+    block16:[-2,2],block17:[-2,0], block18:[-3,-2],block19:[-4,0],block20:[-3,5],
+    block21:[-5,3],block22:[-4,1], block23:[-6,1],
+  };
+
+  const love  = document.getElementById('s3-love');
+  const block = love.querySelector('.block');
+  love.style.top = '0px';
+
+  block.style.top    = '50%';
+  block.style.left   = '50%';
+  block.style.margin = '-20px 0 0 -20px';
+
+  const bLeft = parseFloat(window.getComputedStyle(block).left);
+  const bTop  = parseFloat(window.getComputedStyle(block).top);
+
+  let index = 0, timer;
+
+  function next() {
+    if (++index >= 24) { clearInterval(timer); rise(); return; }
+
+    block.style.visibility = 'visible';
+    block.style.left = (bLeft + 40 * offPitn['block' + index][0]) + 'px';
+    block.style.top  = (bTop  - 40 * offPitn['block' + index][1]) + 'px';
+
+    for (let i = 0; i < block.children.length; i++) {
+      block.children[i].style.left = (blkPitn['block' + index][i][0] * -40) + 'px';
+      block.children[i].style.top  = (blkPitn['block' + index][i][1] * -40) + 'px';
+    }
+
+    const clone = block.cloneNode(true);
+    love.appendChild(clone);
+
+    if (love.children.length >= 24) {
+      love.children[love.children.length - 1].children[2].style.display = 'none';
+      block.style.display = 'none';
+    }
+  }
+
+  function rise() {
+    let dist = 0;
+    const loveTop = parseFloat(love.style.top) || 0;
+    const t = setInterval(() => {
+      dist += 1;
+      love.style.top = (loveTop - dist) + 'px';
+      if (dist >= 100) { clearInterval(t); if (onComplete) onComplete(); }
+    }, 22);
+  }
+
+  /* start after 2.5 s (no footer border to wait for) */
+  setTimeout(() => { timer = setInterval(next, 280); }, 2500);
+}
+
+
+/* ═══════════════════════════════════════════
+   STAGE 4 — CRYSTAL HEART
+═══════════════════════════════════════════ */
+function initStage4() {
+  /* scatter photos */
+  const pos4 = [
+    { top:'9%',    left:'4%',   rotate:-9  },
+    { top:'11%',   right:'4%',  rotate: 7  },
+    { bottom:'10%',left:'4%',   rotate: 6  },
+    { bottom:'8%', right:'4%',  rotate:-8  },
+    { top:'46%',   left:'2.5%', rotate: 11 },
+    { top:'43%',   right:'2.5%',rotate:-12 },
+  ];
+
+  for (let i = 1; i <= 6; i++) {
+    const el = document.querySelector('#stage-4 .s4-p' + i);
+    const p  = pos4[i - 1];
+    el.style.position = 'absolute';
+    Object.assign(el.style, p);
+    el.style.transform = 'rotate(' + p.rotate + 'deg)';
+    el.style.opacity   = '0';
+    gsap.to(el, { opacity: .25, duration: 2, delay: .3 * i, ease: 'power2.out' });
+    gsap.to(el, { y: -8, duration: 4 + i * .5, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: .6 * i });
+  }
+
+  /* text reveal */
+  gsap.to('#s4-knew-it', { opacity: 1, duration: 1.5, ease: 'power3.out', delay: .6 });
+  gsap.to('#s4-names',   { opacity: 1, duration: 1.3, ease: 'power3.out', delay: 1.1 });
+
+  /* music button — plain HTML5 audio, no CORS issues */
+  const s4Audio = document.getElementById('s4-audio');
+  const s4Btn   = document.getElementById('s4-music-btn');
+  s4Btn.addEventListener('click', () => {
+    s4Audio.volume = 0.6;
+    s4Audio.play().catch(() => {});
+    gsap.to(s4Btn, { opacity: 0, duration: 1, pointerEvents: 'none' });
+  });
+
+  /* inject Three.js ES module — uses global gsap already loaded */
+  const s = document.createElement('script');
+  s.type = 'module';
+  /* eslint-disable */
+  s.textContent = `
+    import * as THREE    from "https://cdn.skypack.dev/three@0.135.0";
+    import { GLTFLoader } from "https://cdn.skypack.dev/three@0.135.0/examples/jsm/loaders/GLTFLoader";
+    const gsap = window.gsap;
+
+    const canvas = document.getElementById('s4-canvas');
+    const params = { count:1500, max:12.5*Math.PI, a:2, c:4.5 };
+    const scene  = new THREE.Scene();
+    scene.background = new THREE.Color(0x16000a);
+    const clock  = new THREE.Clock();
+    const T      = { cur:0, t0:0, t1:0, t:0, freq:.0005 };
+    const ang    = { x:0, z:0 };
+    let data=0, model, analyser, sound, running=false;
+    let heartMat, snowMat;
+
+    const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, .1, 100);
+    camera.position.set(0,0,4.5);
+    scene.add(camera);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+    renderer.setSize(innerWidth, innerHeight);
+
+    /* —— heart particles —— */
+    const n=params.count;
+    const sc=new Float32Array(n), co=new Float32Array(n*3),
+          sp=new Float32Array(n), r=new Float32Array(n), r1=new Float32Array(n);
+    const CC=['white','red','pink','crimson','hotpink'];
+    const sg=new THREE.PlaneGeometry(1,1), ig=new THREE.InstancedBufferGeometry();
+    Object.keys(sg.attributes).forEach(a=>{ ig.attributes[a]=sg.attributes[a]; });
+    ig.index=sg.index; ig.maxInstancedCount=n;
+    for(let i=0;i<n;i++){
+      r[i]=Math.random(); r1[i]=Math.random(); sc[i]=Math.random()*.35;
+      sp[i]=Math.random()*params.max;
+      const c=new THREE.Color(CC[i%CC.length|0]);
+      co[i*3]=c.r; co[i*3+1]=c.g; co[i*3+2]=c.b;
+    }
+    ig.setAttribute('random', new THREE.InstancedBufferAttribute(r,1,false));
+    ig.setAttribute('random1',new THREE.InstancedBufferAttribute(r1,1,false));
+    ig.setAttribute('aScale', new THREE.InstancedBufferAttribute(sc,1,false));
+    ig.setAttribute('aSpeed', new THREE.InstancedBufferAttribute(sp,1,false));
+    ig.setAttribute('aColor', new THREE.InstancedBufferAttribute(co,3,false));
+    heartMat = new THREE.ShaderMaterial({
+      vertexShader:   document.getElementById('vertexShader').textContent,
+      fragmentShader: document.getElementById('fragmentShader').textContent,
+      uniforms:{ uTime:{value:0}, uSize:{value:.2},
+        uTex:{value:new THREE.TextureLoader().load('https://assets.codepen.io/74321/heart.png')} },
+      depthWrite:false, blending:THREE.AdditiveBlending, transparent:true
+    });
+    scene.add(new THREE.Mesh(ig, heartMat));
+
+    /* —— snow/floating hearts —— */
+    const sn=550;
+    const ssc=new Float32Array(sn), sco=new Float32Array(sn*3),
+          ph=new Float32Array(sn),  sr=new Float32Array(sn), sr1=new Float32Array(sn);
+    const SC=['red','pink','hotpink'];
+    const sg2=new THREE.PlaneGeometry(1,1), ig2=new THREE.InstancedBufferGeometry();
+    Object.keys(sg2.attributes).forEach(a=>{ ig2.attributes[a]=sg2.attributes[a]; });
+    ig2.index=sg2.index; ig2.maxInstancedCount=sn;
+    for(let i=0;i<sn;i++){
+      ph[i]=(Math.random()-.5)*10; sr[i]=Math.random(); sr1[i]=Math.random();
+      ssc[i]=Math.random()*.35;
+      const c=new THREE.Color(SC[i%SC.length|0]);
+      sco[i*3]=c.r; sco[i*3+1]=c.g; sco[i*3+2]=c.b;
+    }
+    ig2.setAttribute('phi',   new THREE.InstancedBufferAttribute(ph,1,false));
+    ig2.setAttribute('random',new THREE.InstancedBufferAttribute(sr,1,false));
+    ig2.setAttribute('random1',new THREE.InstancedBufferAttribute(sr1,1,false));
+    ig2.setAttribute('aScale',new THREE.InstancedBufferAttribute(ssc,1,false));
+    ig2.setAttribute('aColor',new THREE.InstancedBufferAttribute(sco,3,false));
+    snowMat = new THREE.ShaderMaterial({
+      vertexShader:   document.getElementById('vertexShader1').textContent,
+      fragmentShader: document.getElementById('fragmentShader1').textContent,
+      uniforms:{ uTime:{value:0}, uSize:{value:.3},
+        uTex:{value:new THREE.TextureLoader().load('https://assets.codepen.io/74321/heart.png')} },
+      depthWrite:false, blending:THREE.AdditiveBlending, transparent:true
+    });
+    scene.add(new THREE.Mesh(ig2, snowMat));
+
+    /* —— 3‑D heart model —— */
+    new GLTFLoader().load('https://assets.codepen.io/74321/heart.glb', gltf => {
+      model = gltf.scene.children[0];
+      model.scale.set(.01,.01,.01);
+      model.material = new THREE.MeshMatcapMaterial({
+        matcap: new THREE.TextureLoader().load('https://assets.codepen.io/74321/3.png', ()=>{
+          gsap.to(model.scale,{x:.35,y:.35,z:.35,duration:1.5,ease:'Elastic.easeOut'});
+        }),
+        color:'#ff89aC'
+      });
+      scene.add(model);
+    });
+
+    /* —— mouse parallax —— */
+    window.addEventListener('mousemove', e=>{
+      gsap.to(camera.position,{
+        x:gsap.utils.mapRange(0,innerWidth,.2,-.2,e.clientX),
+        y:gsap.utils.mapRange(0,innerHeight,.2,-.2,-e.clientY)
+      });
+    });
+
+    /* —— resize —— */
+    window.addEventListener('resize',()=>{
+      camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth,innerHeight);
+    });
+
+    /* —— render loop —— */
+    (function loop(){
+      const elapsed = clock.getElapsedTime();
+      const delta   = Math.min(60,(T.cur - elapsed)*1000);
+      if (analyser && running) {
+        T.t = elapsed - T.t0 + T.t1;
+        data = analyser.getAverageFrequency(); data *= data/2000;
+        ang.x += delta*.001*.63; ang.z += delta*.001*.39;
+        if (!sound.isPlaying) {
+          T.t1=T.t; btn.disabled=false; running=false; ang.x=0; ang.z=0;
+          gsap.to(camera.position,{x:0,z:4.5,duration:4,ease:'expo.in'});
+          gsap.to(btn,{opacity:1,duration:1});
+        } else {
+          camera.position.x = Math.sin(ang.x)*params.a;
+          camera.position.z = Math.min(Math.max(Math.cos(ang.z)*params.c,1.75),6.5);
+        }
+      }
+      camera.lookAt(scene.position);
+      if(heartMat) heartMat.uniforms.uTime.value += delta*T.freq*(1+data*.2);
+      if(model)    model.rotation.y -= .0005*delta*(1+data);
+      if(snowMat)  snowMat.uniforms.uTime.value  += delta*.0004*(1+data);
+      renderer.render(scene,camera);
+      T.cur = elapsed;
+      requestAnimationFrame(loop);
+    })();
+  `;
+  /* eslint-enable */
+  document.body.appendChild(s);
+}
+</script>
+</body>
+</html>
